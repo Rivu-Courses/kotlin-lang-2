@@ -48,6 +48,12 @@ suspend fun suspensionTest(scope: CoroutineScope, number: Int) {
         doSomething(3)
     }
 
+    doSomething(4)
+    withContext(Dispatchers.IO) {
+        doSomething(5)
+        doSomething(6)
+    }
+
     job1.join()
     job2.join()
     job3.join()
@@ -92,6 +98,7 @@ fun main() = runBlocking {
 
     val valueOfSomething = something.await()
     println(valueOfSomething)
+
 
     job.join()
 }
