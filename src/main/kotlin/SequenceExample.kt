@@ -2,6 +2,9 @@ import kotlin.random.Random
 
 fun main() {
     sequenceOf(1,2,3,4,5)
+        .map {
+            it
+        }
         .forEach {
             println("Seq 1 "+it)
         }

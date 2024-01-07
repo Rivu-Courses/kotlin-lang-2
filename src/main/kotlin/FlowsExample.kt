@@ -1,5 +1,6 @@
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -45,9 +46,10 @@ fun main() = runBlocking {
         }
 }
 
-fun getData(count: Int) = flow<Int> {
+fun getData(count: Int) = flow<String> {
     println("Creating for $count")
+    emit("First Stream $count")
     repeat(count) {
-        emit(it)
+        emit("Second Stream $it")
     }
 }
