@@ -14,6 +14,8 @@ dependencies {
     testImplementation(kotlin("test"))
     implementation("io.arrow-kt:arrow-core:1.2.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC")
+    implementation("io.insert-koin:koin-core:3.5.3")
+
 }
 
 tasks.test {
