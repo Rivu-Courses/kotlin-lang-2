@@ -1,7 +1,8 @@
 package dev.rivu.bookstore.data
 
 class BooksRepo(
-    private val localDS: BooksLocalDS
+    private val localDS: BooksDS,
+    private val remoteDS: BooksDS,
 ) {
     fun addBook(book: Book): Boolean {
         return localDS.addBook(book)

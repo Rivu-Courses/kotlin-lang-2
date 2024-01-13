@@ -1,10 +1,10 @@
 package dev.rivu.bookstore.data
 
 
-class BooksLocalDS {
+class BooksLocalDS : BooksDS {
     private val books = mutableListOf<Book>()
 
-    fun addBook(book: Book): Boolean {
+    override fun addBook(book: Book): Boolean {
         val existing = books.any {
             it.id.equals(book.id, ignoreCase = true)
         }
@@ -16,15 +16,25 @@ class BooksLocalDS {
         return books.add(book)
     }
 
-    fun getBooks(): List<Book> = books
+    override fun getBooks(): List<Book> = books
 
-    fun getBook(id: String): Book? = books.firstOrNull {
+    override fun getBook(id: String): Book? = books.firstOrNull {
         it.id.equals(id, ignoreCase = true)
     }
 
-    fun getBooksByAuthor(authorName: String): List<Book> = books.filter {
+    override fun getBooksByAuthor(authorName: String): List<Book> = books.filter {
         it.authors.any { author ->
             author.name.equals(authorName, ignoreCase = true)
         }
     }
+}
+
+interface BooksDS {
+    fun addBook(book: Book): Boolean
+
+    fun getBooks(): List<Book>
+
+    fun getBook(id: String): Book?
+
+    fun getBooksByAuthor(authorName: String): List<Book>
 }

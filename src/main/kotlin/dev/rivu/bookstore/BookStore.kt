@@ -9,6 +9,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
+import org.koin.java.KoinJavaComponent.getKoin
 import kotlin.system.exitProcess
 
 fun main() = runBlocking {
@@ -77,9 +78,33 @@ class BookStoreApp : KoinComponent {
         }
     }
 }
-
+/*
+BooksApp
 //Functionalities
 //Give below options to the user to select from
 // add book
 // get books list (all books stored)
 // get book by author
+*/
+
+
+/*
+* IoC => Inversion of Control -> D of SOLID -> Dependency Inversion
+* IoC / Dependency Inversion -> DI-> Dependency Injection, SL -> Service Locator
+*   SL ->
+*       When a class needs / wants a dependency it asks for it
+*       It's always runtime
+*       Constructor injection is also a type of SL
+*       Class knows where it's dependency is coming from
+*
+*   DI ->
+*       Class doesn't necessarily has to ask for dependency, it's provided preemptively
+*       It's mostly compile-time, mostly with annotation processing
+*       Class doesn't care or know where the dependency is coming from
+*
+* Dependency Graph
+*   - Relevant for both DI and SL
+*
+*
+* ClassA -> ClassB
+* */
