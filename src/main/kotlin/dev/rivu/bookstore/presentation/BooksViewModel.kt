@@ -3,15 +3,14 @@ package dev.rivu.bookstore.presentation
 import dev.rivu.bookstore.data.Book
 import dev.rivu.bookstore.data.BooksRepo
 import dev.rivu.bookstore.di.BooksAppScope
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import me.tatarka.inject.annotations.Inject
 
 @BooksAppScope
-@Inject
-class BooksViewModel(
+class BooksViewModel @Inject constructor(
     private val booksRepo: BooksRepo
 ) {
     private val _booksState: MutableStateFlow<BookStoreStates> = MutableStateFlow(BookStoreStates.Options)

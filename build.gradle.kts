@@ -18,8 +18,11 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC")
     //implementation("io.insert-koin:koin-core:3.5.3")
 
-    ksp("me.tatarka.inject:kotlin-inject-compiler-ksp:0.6.3")
-    implementation("me.tatarka.inject:kotlin-inject-runtime:0.6.3")
+//    ksp("me.tatarka.inject:kotlin-inject-compiler-ksp:0.6.3")
+//    implementation("me.tatarka.inject:kotlin-inject-runtime:0.6.3")
+
+    ksp("com.google.dagger:dagger-compiler:2.48")
+    implementation("com.google.dagger:dagger:2.48")
 
 }
 

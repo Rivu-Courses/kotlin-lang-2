@@ -1,23 +1,23 @@
 package dev.rivu.bookstore
 
-import dev.rivu.bookstore.data.di.DataComponent
-import dev.rivu.bookstore.data.di.create
-import dev.rivu.bookstore.di.AppComponent
-import dev.rivu.bookstore.di.BooksAppScope
-import dev.rivu.bookstore.di.create
+import dev.rivu.bookstore.di.DaggerAppComponent
 import dev.rivu.bookstore.presentation.BookStoreStates
 import dev.rivu.bookstore.presentation.BooksViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.runBlocking
-import me.tatarka.inject.annotations.Inject
 import kotlin.system.exitProcess
 
 fun main() = runBlocking {
-    AppComponent::class.create(DataComponent::class.create()).app.runApp()
+    DaggerAppComponent
+        .create()
+        .bookStoreApp()
+        .runApp()
 }
 
-@BooksAppScope
-@Inject
-class BookStoreApp(val viewModel: BooksViewModel) {
+class BookStoreApp @Inject constructor() {
+
+    @Inject lateinit var viewModel: BooksViewModel
+
 
     suspend fun runApp() {
         viewModel.booksState.collect { latestState ->
