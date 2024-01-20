@@ -10,7 +10,7 @@ val DataModule = module {
     single<BooksDS>(named("localDS")) {
         BooksLocalDS()
     }
-    single<BooksDS>(named("remoteDS")) {
-        BooksLocalDS()
+    factory<BooksDS>(named("remoteDS")) {
+        BooksRemoteDS.Factory.getInstance()
     }
 }

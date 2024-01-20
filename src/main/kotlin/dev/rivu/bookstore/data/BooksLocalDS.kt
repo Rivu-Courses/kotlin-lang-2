@@ -29,12 +29,3 @@ class BooksLocalDS : BooksDS {
     }
 }
 
-interface BooksDS {
-    fun addBook(book: Book): Boolean
-
-    fun getBooks(): List<Book>
-
-    fun getBook(id: String): Book?
-
-    fun getBooksByAuthor(authorName: String): List<Book>
-}
