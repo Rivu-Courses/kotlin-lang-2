@@ -1,11 +1,6 @@
 package dev.rivu.bookstore.data
 
-import dev.rivu.bookstore.di.BooksAppScope
-import me.tatarka.inject.annotations.Inject
 
-
-@BooksAppScope
-@Inject
 class BooksLocalDS : BooksDS {
     private val books = mutableListOf<Book>()
 

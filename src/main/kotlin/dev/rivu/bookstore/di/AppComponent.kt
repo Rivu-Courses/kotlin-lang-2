@@ -1,12 +1,11 @@
 package dev.rivu.bookstore.di
 
+import dagger.Component
 import dev.rivu.bookstore.BookStoreApp
-import dev.rivu.bookstore.data.di.DataComponent
-import dev.rivu.bookstore.presentation.BooksViewModel
-import me.tatarka.inject.annotations.Component
+import dev.rivu.bookstore.data.di.DataModule
 
 @BooksAppScope
-@Component
-abstract class AppComponent(@Component val dataComponent: DataComponent) {
-    abstract val app: BookStoreApp
+@Component(modules = [DataModule::class])
+abstract class AppComponent() {
+    abstract fun bookStoreApp(): BookStoreApp
 }

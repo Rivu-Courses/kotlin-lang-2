@@ -1,22 +1,15 @@
 package dev.rivu.bookstore.data
 
 import dev.rivu.bookstore.di.BooksAppScope
-import me.tatarka.inject.annotations.Inject
+import javax.inject.Inject
+import javax.inject.Named
 
 
 @BooksAppScope
-@Inject
-class BooksRepo(
-    private val dsMap: Map<String, BooksDS>
+class BooksRepo @Inject constructor(
+    @Named("localDS") private val localDS: BooksDS,
+    @Named("remoteDS") private val remoteDS: BooksDS,
 ) {
-
-    private val localDS: BooksDS
-    private val remoteDS: BooksDS
-
-    init {
-        localDS = dsMap["local"] ?: throw RuntimeException("Unable to get localDS, check dependency graph")
-        remoteDS = dsMap["remote"] ?: throw RuntimeException("Unable to get remoteDS, check dependency graph")
-    }
 
     fun addBook(book: Book): Boolean {
         return localDS.addBook(book)
