@@ -1,12 +1,16 @@
 package dev.rivu.bookstore
 
+import dev.rivu.bookstore.data.Author
+import dev.rivu.bookstore.data.Book
 import dev.rivu.bookstore.data.di.DataComponent
 import dev.rivu.bookstore.data.di.create
 import dev.rivu.bookstore.di.AppComponent
 import dev.rivu.bookstore.di.BooksAppScope
 import dev.rivu.bookstore.di.create
 import dev.rivu.bookstore.presentation.BookStoreStates
+import dev.rivu.bookstore.presentation.BookStoreStates.AddBook
 import dev.rivu.bookstore.presentation.BooksViewModel
+import java.util.*
 import kotlinx.coroutines.runBlocking
 import me.tatarka.inject.annotations.Inject
 import kotlin.system.exitProcess
@@ -21,7 +25,7 @@ class BookStoreApp(val viewModel: BooksViewModel) {
 
     suspend fun runApp() {
         viewModel.booksState.collect { latestState ->
-            when(latestState) {
+            when (latestState) {
                 is BookStoreStates.Options -> {
                     printOptions(latestState.options) { selection ->
                         when (selection) {
@@ -35,17 +39,76 @@ class BookStoreApp(val viewModel: BooksViewModel) {
                     }
 
                 }
+
                 is BookStoreStates.AddBook -> {
-                    println("TODO")
+                    when (latestState) {
+                        is AddBook.Adding -> addBook(viewModel)
+                        is AddBook.Loading -> println("Loading")
+                        is AddBook.AddSuccess -> {
+                            println("Successfully added the book. Press any key to go back")
+                            readLine()
+                            viewModel.goBack()
+                        }
+                        is AddBook.AddError -> {
+                            println("Error adding the book. Press any key to go back")
+                            readLine()
+                            viewModel.goBack()
+                        }
+                    }
                 }
+
                 is BookStoreStates.AuthorInputScreen -> {
                     println("TODO")
                 }
+
                 is BookStoreStates.BookList -> {
-                    println("TODO")
+                    when(latestState) {
+                        is BookStoreStates.BookList.Loading -> println("Loading")
+                        is BookStoreStates.BookList.Success -> {
+                            println("Success")
+                            latestState.books.forEach {
+                                println(it)
+                            }
+                            println("Press any key to go back")
+                            readLine()
+                            viewModel.goBack()
+                        }
+                        is BookStoreStates.BookList.Error -> {
+                            println("Error")
+                            println(latestState.errorDetails)
+                            println("Press any key to go back")
+                            readLine()
+                            viewModel.goBack()
+                        }
+                    }
                 }
             }
         }
+    }
+
+    private fun addBook(viewModel: BooksViewModel) {
+        println("Enter Title")
+        val title = readlnOrNull()
+        println("Enter Publisher Name")
+        val publisher = readlnOrNull()
+        println("Enter Authors names, comma separated")
+        val authors = readlnOrNull()?.split(",")
+
+        if (title.isNullOrBlank() || publisher.isNullOrBlank() || authors.isNullOrEmpty()) {
+            println("Please Try Again")
+            viewModel.goBack()
+            return
+        }
+
+        val book = Book(
+            id = UUID.randomUUID().toString(),
+            authors = authors.map {
+                Author(name = it)
+            },
+            publisher = publisher,
+            title = title
+        )
+        viewModel.addBook(book)
     }
 
     fun printOptions(

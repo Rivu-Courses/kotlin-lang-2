@@ -1,8 +1,10 @@
 package dev.rivu.bookstore.presentation
 
+import arrow.core.Either
 import dev.rivu.bookstore.data.Book
 import dev.rivu.bookstore.data.BooksRepo
 import dev.rivu.bookstore.di.BooksAppScope
+import dev.rivu.bookstore.presentation.BookStoreStates.Options
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -53,25 +55,32 @@ class BooksViewModel(
 
     fun getBookList() {
         BookStoreStates.BookList.Loading
-        val books = booksRepo.getBooks()
+        val booksResult = booksRepo.getBooks()
         _booksState.update {
-            if (books.isNotEmpty()) {
-                BookStoreStates.BookList.Success(books)
+            if (booksResult.isRight()) {
+                BookStoreStates.BookList.Success((booksResult as Either.Right).value)
             } else {
-                BookStoreStates.BookList.Error
+                BookStoreStates.BookList.Error(booksResult.leftOrNull()?.stackTraceToString() ?: "Unknown Error")
             }
         }
     }
 
     fun getBooksByAuthor(authorName: String) {
         BookStoreStates.BookList.Loading
-        val books = booksRepo.getBooksByAuthor(authorName)
+        val booksResult = booksRepo.getBooksByAuthor(authorName)
         _booksState.update {
-            if (books.isNotEmpty()) {
-                BookStoreStates.BookList.Success(books)
+
+            if (booksResult.isRight()) {
+                BookStoreStates.BookList.Success((booksResult as Either.Right).value)
             } else {
-                BookStoreStates.BookList.Error
+                BookStoreStates.BookList.Error(booksResult.leftOrNull()?.stackTraceToString() ?: "Unknown Error")
             }
+        }
+    }
+
+    fun goBack() {
+        _booksState.update {
+            Options
         }
     }
 }

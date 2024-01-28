@@ -1,11 +1,13 @@
 package dev.rivu.bookstore.data
 
+import arrow.core.Either
+
 interface BooksDS {
     fun addBook(book: Book): Boolean
 
-    fun getBooks(): List<Book>
+    fun getBooks(): Either<Throwable, List<Book>>
 
-    fun getBook(id: String): Book?
+    fun getBook(id: String): Either<Throwable, Book>
 
-    fun getBooksByAuthor(authorName: String): List<Book>
+    fun getBooksByAuthor(authorName: String): Either<Throwable, List<Book>>
 }

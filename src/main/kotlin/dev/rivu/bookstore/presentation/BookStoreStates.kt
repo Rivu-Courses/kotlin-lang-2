@@ -30,6 +30,6 @@ sealed class BookStoreStates {
             val books: List<Book>
         ) : BookList()
 
-        object Error : BookList()
+        data class Error(val errorDetails: String) : BookList()
     }
 }

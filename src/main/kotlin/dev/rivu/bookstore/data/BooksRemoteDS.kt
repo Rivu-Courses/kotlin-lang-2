@@ -1,5 +1,7 @@
 package dev.rivu.bookstore.data
 
+import arrow.core.Either
+
 
 class BooksRemoteDS private constructor() : BooksDS {
 
@@ -7,11 +9,17 @@ class BooksRemoteDS private constructor() : BooksDS {
         TODO()
     }
 
-    override fun getBooks(): List<Book> = TODO()
+    override fun getBooks(): Either<Throwable, List<Book>> = Either.catch {
+        TODO()
+    }
 
-    override fun getBook(id: String): Book? = TODO()
+    override fun getBook(id: String): Either<Throwable, Book> = Either.catch {
+        TODO()
+    }
 
-    override fun getBooksByAuthor(authorName: String): List<Book> = TODO()
+    override fun getBooksByAuthor(authorName: String): Either<Throwable, List<Book>> = Either.catch {
+        TODO()
+    }
 
     companion object Factory {
         private var instance: BooksRemoteDS? = null

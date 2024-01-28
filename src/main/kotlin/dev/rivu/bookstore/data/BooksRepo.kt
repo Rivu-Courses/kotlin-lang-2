@@ -1,5 +1,8 @@
 package dev.rivu.bookstore.data
 
+import arrow.core.Either
+import arrow.core.catch
+import arrow.core.recover
 import dev.rivu.bookstore.di.BooksAppScope
 import me.tatarka.inject.annotations.Inject
 
@@ -14,9 +17,15 @@ class BooksRepo(
         return localDS.addBook(book)
     }
 
-    fun getBooks(): List<Book> = localDS.getBooks()
+    fun getBooks(): Either<Throwable, List<Book>> = localDS.getBooks().recover {
+        remoteDS.getBooks().bind()
+    }
 
-    fun getBook(id: String): Book? = localDS.getBook(id)
+    fun getBook(id: String): Either<Throwable, Book> = localDS.getBook(id).recover {
+        remoteDS.getBook(id).bind()
+    }
 
-    fun getBooksByAuthor(authorName: String): List<Book> = localDS.getBooksByAuthor(authorName)
+    fun getBooksByAuthor(authorName: String): Either<Throwable, List<Book>> = localDS.getBooksByAuthor(authorName).recover {
+        remoteDS.getBooksByAuthor(authorName).bind()
+    }
 }

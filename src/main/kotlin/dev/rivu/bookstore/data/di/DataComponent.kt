@@ -4,7 +4,6 @@ import dev.rivu.bookstore.data.BooksDS
 import dev.rivu.bookstore.data.BooksLocalDS
 import dev.rivu.bookstore.data.BooksRemoteDS
 import dev.rivu.bookstore.data.BooksRepo
-import dev.rivu.bookstore.di.BooksAppScope
 import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.IntoMap
 import me.tatarka.inject.annotations.Provides
