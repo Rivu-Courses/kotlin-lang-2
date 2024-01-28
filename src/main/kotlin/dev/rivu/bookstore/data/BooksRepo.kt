@@ -1,9 +1,15 @@
 package dev.rivu.bookstore.data
 
+import dev.rivu.bookstore.di.BooksAppScope
+import me.tatarka.inject.annotations.Inject
+
+
 class BooksRepo(
     private val localDS: BooksDS,
     private val remoteDS: BooksDS,
 ) {
+
+
     fun addBook(book: Book): Boolean {
         return localDS.addBook(book)
     }

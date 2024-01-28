@@ -1,34 +1,23 @@
 package dev.rivu.bookstore
 
-import dev.rivu.bookstore.data.DataModule
+import dev.rivu.bookstore.data.di.DataComponent
+import dev.rivu.bookstore.data.di.create
+import dev.rivu.bookstore.di.AppComponent
+import dev.rivu.bookstore.di.BooksAppScope
+import dev.rivu.bookstore.di.create
 import dev.rivu.bookstore.presentation.BookStoreStates
 import dev.rivu.bookstore.presentation.BooksViewModel
-import dev.rivu.bookstore.presentation.PresentationModule
 import kotlinx.coroutines.runBlocking
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.java.KoinJavaComponent.getKoin
+import me.tatarka.inject.annotations.Inject
 import kotlin.system.exitProcess
 
 fun main() = runBlocking {
-
-    startKoin {
-        modules(
-            PresentationModule, DataModule
-        )
-    }
-
-
-    BookStoreApp().runApp()
-
-    stopKoin()
+    AppComponent::class.create(DataComponent::class.create()).app.runApp()
 }
 
-class BookStoreApp : KoinComponent {
-    val viewModel: BooksViewModel by inject<BooksViewModel>()
-
+@BooksAppScope
+@Inject
+class BookStoreApp(val viewModel: BooksViewModel) {
 
     suspend fun runApp() {
         viewModel.booksState.collect { latestState ->
@@ -40,7 +29,6 @@ class BookStoreApp : KoinComponent {
                             1 -> viewModel.getBookList()
                             2 -> viewModel.authorInputScreen()
                             3 -> {
-                                stopKoin()
                                 exitProcess(0)
                             }
                         }
