@@ -3,6 +3,7 @@ package dev.rivu.bookstore.data.di
 import dev.rivu.bookstore.data.BooksDS
 import dev.rivu.bookstore.data.BooksLocalDS
 import dev.rivu.bookstore.data.BooksRemoteDS
+import dev.rivu.bookstore.data.BooksRepo
 import dev.rivu.bookstore.di.BooksAppScope
 import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.IntoMap
@@ -14,9 +15,16 @@ abstract class DataComponent {
 
     @IntoMap
     @Provides
-    protected fun provideLocalDS(): Pair<String, BooksDS> = "local" to BooksLocalDS()
+    fun provideLocalDS(): Pair<String, BooksDS> = "local" to BooksLocalDS()
 
     @IntoMap
     @Provides
-    protected fun provideRemoteDS(): Pair<String, BooksDS> = "remote" to BooksRemoteDS.getInstance()
+    fun provideRemoteDS(): Pair<String, BooksDS> = "remote" to BooksRemoteDS.getInstance()
+
+
+    @Provides
+    fun provideRepo(): BooksRepo = BooksRepo(
+        localDS = dsMap.getValue("local"),
+        remoteDS = dsMap.getValue("remote"),
+    )
 }
