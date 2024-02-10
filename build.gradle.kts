@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     kotlin("jvm") version "1.9.20"
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"
@@ -16,6 +19,9 @@ dependencies {
     testImplementation(kotlin("test"))
     implementation("io.arrow-kt:arrow-core:1.2.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+    testImplementation("io.mockk:mockk:1.13.9")
     //implementation("io.insert-koin:koin-core:3.5.3")
 
     ksp("me.tatarka.inject:kotlin-inject-compiler-ksp:0.6.3")
@@ -28,7 +34,7 @@ tasks.test {
 }
 
 kotlin {
-    jvmToolchain(8)
+    jvmToolchain(11)
 }
 
 application {
