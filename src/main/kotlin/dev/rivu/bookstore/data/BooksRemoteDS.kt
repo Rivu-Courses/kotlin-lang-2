@@ -21,6 +21,10 @@ class BooksRemoteDS private constructor() : BooksDS {
         TODO()
     }
 
+    override fun getBooksByPublisher(publisher: String): Either<Throwable, List<Book>> {
+        TODO("Not yet implemented")
+    }
+
     companion object Factory {
         private var instance: BooksRemoteDS? = null
         fun getInstance(): BooksRemoteDS {

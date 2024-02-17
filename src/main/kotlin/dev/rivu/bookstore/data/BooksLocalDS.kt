@@ -57,5 +57,17 @@ class BooksLocalDS constructor(
 
         authorBooks
     }
+
+    override fun getBooksByPublisher(publisher: String): Either<Throwable, List<Book>> = either {
+        val publisherBooks = books.filter {
+            it.publisher.equals(publisher, ignoreCase = true)
+        }
+
+        ensure(publisherBooks.isNotEmpty()) {
+            RuntimeException("No books found with the author $publisher")
+        }
+
+        publisherBooks
+    }
 }
 

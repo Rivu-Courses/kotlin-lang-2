@@ -40,3 +40,7 @@ kotlin {
 application {
     mainClass.set("MainKt")
 }
+
+tasks.getByName("assemble") {
+    dependsOn(tasks.getByName("test"))
+}

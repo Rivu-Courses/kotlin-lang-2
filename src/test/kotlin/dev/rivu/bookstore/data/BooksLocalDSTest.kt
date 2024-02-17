@@ -1,5 +1,6 @@
 package dev.rivu.bookstore.data
 
+import arrow.core.Either
 import arrow.core.computations.ResultEffect.bind
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -112,5 +113,39 @@ class BooksLocalDSTest {
     @Test
     fun getBooksByAuthor() {
         assert(false)
+    }
+
+    @Test
+    fun getBooksByPublisher() {
+        //Given
+        val dummyBook1 = Book(
+            id = "test123",
+            publisher = "Some publisher",
+            authors = emptyList(),
+            title = "Test Book"
+        )
+        listOfBooks.add(dummyBook1)
+        val dummyBook2 = Book(
+            id = "test1234",
+            publisher = "Some Other publisher",
+            authors = emptyList(),
+            title = "Test Book 2"
+        )
+        listOfBooks.add(dummyBook2)
+        val dummyBook3 = Book(
+            id = "test12132",
+            publisher = "Some Other publisher",
+            authors = emptyList(),
+            title = "Test Book 3"
+        )
+        listOfBooks.add(dummyBook3)
+
+
+        //When
+        val result = booksLocalDS.getBooksByPublisher("Some Other publisher")
+
+        //Then
+        val expected = Either.Right(listOf(dummyBook2, dummyBook3))
+        assertEquals(expected, result)
     }
 }

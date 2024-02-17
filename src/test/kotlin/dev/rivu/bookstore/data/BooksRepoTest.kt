@@ -52,6 +52,25 @@ class BooksRepoTest {
     }
 
     @Test
+    fun addBookFailureScenario() {
+        val dummyBook = Book(
+            id = "test123",
+            publisher = "Some publisher",
+            authors = emptyList(),
+            title = "Test Book"
+        )
+
+        every {
+            booksLocalDS.addBook(
+                any()
+            )
+        } returns false
+
+        val result = booksRepo.addBook(dummyBook)
+        assertFalse(result)
+    }
+
+    @Test
     fun addBookBehaviour() {//Should not rely on behaviour test
         val dummyBook = Book(
             id = "test123",
