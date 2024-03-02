@@ -116,7 +116,7 @@ class BooksLocalDSTest {
     }
 
     @Test
-    fun getBooksByPublisher() {
+    fun `getBooksByPublisher should return all books by publisher as saved in the list`() {
         //Given
         val dummyBook1 = Book(
             id = "test123",
