@@ -12,4 +12,6 @@ interface BooksDS {
     fun getBooksByAuthor(authorName: String): Either<Throwable, List<Book>>
 
     fun getBooksByPublisher(publisher: String): Either<Throwable, List<Book>>
+
+    fun searchBooks(query: String): Either<Throwable, List<Book>>
 }

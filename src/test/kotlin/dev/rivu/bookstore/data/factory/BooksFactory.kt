@@ -35,4 +35,31 @@ object BooksFactory {
             title = nameGenerator.next().first.name
         )
     }
+    val booksGenerator = Arb.list<Book>(bookGenerator)
+
+    val commonTitleBooksGeneratorForSearch = arbitrary<List<Book>> {
+        val publisher = publisherGenerator.next()
+        val titlePrefix = nameGenerator.next().first.name
+        listOf(10).map {
+            Book(
+                id = idGenerator.next().toString(),
+                publisher = publisher,
+                authors = authorsGenerator.next(),
+                title = titlePrefix + " " + Arb.string().next()
+            )
+        }
+    }
+
+    val commonAuthorBooksGeneratorForSearch = arbitrary<List<Book>> {
+        val publisher = publisherGenerator.next()
+        val authors = authorsGenerator.next()
+        listOf(10).map {
+            Book(
+                id = idGenerator.next().toString(),
+                publisher = publisher,
+                authors = authors,
+                title = nameGenerator.next().first.name
+            )
+        }
+    }
 }

@@ -11,6 +11,8 @@ class FakeBooksSuccessDS(
 
     private var booksStub: List<Book> = emptyList()
     private var bookStub: Book? = null
+    private var searchBooksStub: List<Book>? = null
+
 
     fun stubBook(book: Book) {
         bookStub = book
@@ -26,14 +28,21 @@ class FakeBooksSuccessDS(
     override fun getBooks(): Either<Throwable, List<Book>> = either {
         booksStub
     }
+    fun stubSearchBook(book: List<Book>) {
+        searchBooksStub = book
+    }
 
     override fun getBook(id: String): Either<Throwable, Book> = bookStub?.let {
         Either.Right(bookStub!!)
-    } ?: Either.Left(UnsupportedOperationException("Book not found"))
+    } ?: throw UnsupportedOperationException("book stub not created")
 
     override fun getBooksByAuthor(authorName: String): Either<Throwable, List<Book>> = Either.Right(booksStub)
 
     override fun getBooksByPublisher(publisher: String): Either<Throwable, List<Book>> {
         TODO("Not yet implemented")
     }
+
+    override fun searchBooks(query: String): Either<Throwable, List<Book>> = searchBooksStub?.let {
+        Either.Right(searchBooksStub!!)
+    } ?: throw UnsupportedOperationException("book stub not created")
 }

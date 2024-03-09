@@ -25,6 +25,12 @@ class BooksRemoteDS private constructor() : BooksDS {
         TODO("Not yet implemented")
     }
 
+
+
+    override fun searchBooks(query: String): Either<Throwable, List<Book>> {
+        TODO("Not yet implemented")
+    }
+
     companion object Factory {
         private var instance: BooksRemoteDS? = null
         fun getInstance(): BooksRemoteDS {

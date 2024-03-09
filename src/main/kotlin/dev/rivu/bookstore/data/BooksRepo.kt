@@ -28,4 +28,8 @@ class BooksRepo(
     fun getBooksByAuthor(authorName: String): Either<Throwable, List<Book>> = localDS.getBooksByAuthor(authorName).recover {
         remoteDS.getBooksByAuthor(authorName).bind()
     }
+
+    fun searchBooks(query: String): Either<Throwable, List<Book>> = localDS.searchBooks(query).recover {
+        remoteDS.searchBooks(query).bind()
+    }
 }

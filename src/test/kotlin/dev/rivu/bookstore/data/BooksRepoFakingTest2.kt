@@ -1,7 +1,13 @@
 package dev.rivu.bookstore.data
 
 import arrow.core.Either
+import arrow.core.left
+import arrow.core.right
+import dev.rivu.bookstore.data.factory.BooksFactory
 import dev.rivu.bookstore.data.fakes.FakeBooksDS
+import dev.rivu.bookstore.data.fakes.FakeBooksSuccessDS
+import io.kotest.assertions.arrow.core.shouldBeRight
+import io.kotest.property.arbitrary.next
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -9,16 +15,18 @@ import org.junit.jupiter.api.Assertions.*
 
 class BooksRepoFakingTest2 {
 
-    lateinit var booksDS: FakeBooksDS
+    lateinit var localBooksDS: FakeBooksDS
+    lateinit var remoteBooksDS: FakeBooksSuccessDS
     lateinit var booksRepoSUT: BooksRepo
 
     @BeforeEach
     fun setUp() {
-        booksDS = FakeBooksDS()
+        localBooksDS = FakeBooksDS()
+        remoteBooksDS = FakeBooksSuccessDS()
 
         booksRepoSUT = BooksRepo(
-            localDS = booksDS,
-            remoteDS = booksDS
+            localDS = localBooksDS,
+            remoteDS = remoteBooksDS
         )
     }
 
@@ -31,7 +39,7 @@ class BooksRepoFakingTest2 {
             title = "Test Book"
         )
 
-        booksDS.stubAddBookResult(true)
+        localBooksDS.stubAddBookResult(true)
 
         val result = booksRepoSUT.addBook(dummyBook)
         assert(result)
@@ -47,7 +55,7 @@ class BooksRepoFakingTest2 {
         )
 
         //Given
-        booksDS.stubAddBookResult(false)
+        localBooksDS.stubAddBookResult(false)
 
         //When
         val result = booksRepoSUT.addBook(dummyBook)
@@ -66,7 +74,7 @@ class BooksRepoFakingTest2 {
                 title = "Test Book"
             )
         }
-        booksDS.stubBookList(Either.Right(stubBooksList))
+        localBooksDS.stubBookList(Either.Right(stubBooksList))
 
         val result = booksRepoSUT.getBooks()
         assert(result.isRight())
@@ -77,7 +85,7 @@ class BooksRepoFakingTest2 {
     @Test
     fun getBooksFailureScenario() {
 
-        booksDS.stubBookList(Either.Left(RuntimeException()))
+        localBooksDS.stubBookList(Either.Left(RuntimeException()))
 
         val result = booksRepoSUT.getBooks()
         assert(result.isLeft())
@@ -91,5 +99,49 @@ class BooksRepoFakingTest2 {
     @Test
     fun getBooksByAuthor() {
         assert(false)
+    }
+
+    @Test
+    fun searchBookSuccessScenario() {
+        val commonBooksList = BooksFactory.commonTitleBooksGeneratorForSearch.next()
+
+        localBooksDS.stubSearchBook(Either.Right(commonBooksList))
+
+        val query = commonBooksList[0].title.substringBefore(" ")
+
+        val result = booksRepoSUT.searchBooks(query)
+
+        assertTrue(result.isRight())
+        assertEquals(commonBooksList, result.getOrNull())
+    }
+
+    @Test
+    fun searchBookFailureScenario() {
+        val commonBooksList = BooksFactory.commonTitleBooksGeneratorForSearch.next()
+        val randomBooksList = BooksFactory.booksGenerator.next()
+
+        val totalBooksList = commonBooksList + randomBooksList
+        localBooksDS.stubSearchBook(Either.Left(RuntimeException()))
+
+        val result = booksRepoSUT.searchBooks("hsbchjsbd")
+
+        assertTrue(result.isLeft())
+    }
+
+    @Test
+    fun searchBookRemoteDSSuccessScenario() {
+        val commonBooksList = BooksFactory.commonTitleBooksGeneratorForSearch.next()
+
+        localBooksDS.stubSearchBook(Either.Left(RuntimeException()))
+        remoteBooksDS.stubSearchBook(commonBooksList)
+
+        val query = commonBooksList[0].title.substringBefore(" ")
+
+        val result = booksRepoSUT.searchBooks(query)
+
+        result.shouldBeRight()
+
+        assertTrue(result.isRight())
+        assertEquals(commonBooksList, result.getOrNull())
     }
 }

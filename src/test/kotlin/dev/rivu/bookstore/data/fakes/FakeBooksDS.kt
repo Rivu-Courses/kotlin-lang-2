@@ -9,6 +9,7 @@ class FakeBooksDS(
 ): BooksDS {
 
     private lateinit var booksStub: Either<Throwable, List<Book>>
+    private lateinit var searchBooksStub: Either<Throwable, List<Book>>
     private lateinit var bookStub: Either<Throwable, Book>
     private var addBookResult: Boolean = false
 
@@ -17,6 +18,9 @@ class FakeBooksDS(
     }
     fun stubBookList(book: Either<Throwable, List<Book>>) {
         booksStub = book
+    }
+    fun stubSearchBook(book: Either<Throwable, List<Book>>) {
+        searchBooksStub = book
     }
 
     fun stubAddBookResult(result: Boolean) {
@@ -34,6 +38,10 @@ class FakeBooksDS(
     override fun getBooksByAuthor(authorName: String): Either<Throwable, List<Book>> = booksStub
 
     override fun getBooksByPublisher(publisher: String): Either<Throwable, List<Book>> {
-        TODO("Not yet implemented")
+        return booksStub
+    }
+
+    override fun searchBooks(query: String): Either<Throwable, List<Book>> {
+        return searchBooksStub
     }
 }

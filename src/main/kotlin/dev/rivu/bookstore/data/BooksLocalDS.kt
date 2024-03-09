@@ -69,5 +69,20 @@ class BooksLocalDS constructor(
 
         publisherBooks
     }
+
+    override fun searchBooks(query: String): Either<Throwable, List<Book>> = either {
+        val searchResult = books.filter {
+            it.title.contains(query, ignoreCase = true) ||
+            it.authors.any {
+                it.name.contains(query)
+            }
+        }
+
+        ensure(searchResult.isNotEmpty()) {
+            RuntimeException("No books found with the search query")
+        }
+
+        searchResult
+    }
 }
 
